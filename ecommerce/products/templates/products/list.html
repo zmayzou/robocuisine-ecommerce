@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Produits
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+    <div class="container">
+
+        <div class="section-heading">
+            <span>Catalogue</span>
+            <h2>Tous nos produits</h2>
+            <p>
+                Découvrez notre sélection complète de robots culinaires
+                et accessoires premium.
+            </p>
+        </div>
+
+        <form method="get" class="bg-white p-4 rounded-5 shadow-sm mb-5">
+            <div class="row g-3 align-items-end">
+
+                <div class="col-md-5">
+                    <label class="form-label">Recherche</label>
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search|default:'' }}"
+                        class="form-control"
+                        placeholder="Nom du produit..."
+                    >
+                </div>
+
+                <div class="col-md-5">
+                    <label class="form-label">Catégorie</label>
+                    <select name="category" class="form-control">
+                        <option value="">Toutes les catégories</option>
+
+                        {% for category in categories %}
+                            <option
+                                value="{{ category.id }}"
+                                {% if selected_category == category.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn-premium-main border-0 w-100">
+                        Filtrer
+                    </button>
+                </div>
+
+            </div>
+        </form>
+
+        <div class="row g-4">
+
+            {% for product in products %}
+
+            <div class="col-xl-4 col-md-6">
+                <div class="premium-product-card">
+
+                    {% if product.stock > 0 %}
+                        <div class="product-badge">
+                            Disponible
+                        </div>
+                    {% else %}
+                        <div class="product-badge bg-danger">
+                            Rupture
+                        </div>
+                    {% endif %}
+
+                    <div class="premium-image-box">
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+                    </div>
+
+                    <div class="premium-card-body">
+
+                        <div class="product-category">
+                            {{ product.category.name }}
+                        </div>
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+                        <p>
+                            {{ product.description|truncatewords:16 }}
+                        </p>
+
+                        <div class="mb-3">
+                            {% if product.stock > 0 %}
+                                <span class="badge bg-success">
+                                    En stock : {{ product.stock }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    Rupture de stock
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-footer">
+
+                            <div class="price-box">
+                                <span>Prix</span>
+                                <strong>{{ product.price }} DH</strong>
+                            </div>
+
+                            <a
+                                href="{% url 'product_detail' product.slug %}"
+                                class="circle-btn"
+                            >
+                                <i class="bi bi-arrow-up-right"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+                <div class="empty-state">
+                    Aucun produit disponible.
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% if products.paginator.num_pages > 1 %}
+
+        <div class="pagination-wrapper mt-5 d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+
+                    {% if products.has_previous %}
+                    <li class="page-item">
+                        <a
+                            class="page-link"
+                            href="?page={{ products.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+                        >
+                            Previous
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in products.paginator.page_range %}
+                    <li class="page-item {% if products.number == num %}active{% endif %}">
+                        <a
+                            class="page-link"
+                            href="?page={{ num }}{% if search %}&search={{ search }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+                        >
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if products.has_next %}
+                    <li class="page-item">
+                        <a
+                            class="page-link"
+                            href="?page={{ products.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}"
+                        >
+                            Next
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+        </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

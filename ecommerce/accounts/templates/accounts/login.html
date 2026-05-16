@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-5">
+
+                <div class="auth-card">
+
+                    <div class="text-center mb-5">
+
+                        <h1 class="auth-title">
+                            Connexion
+                        </h1>
+
+                        <p class="auth-subtitle">
+                            Accédez à votre espace CookBot
+                        </p>
+
+                    </div>
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control auth-input"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control auth-input"
+                                required
+                            >
+
+                        </div>
+
+                        <button class="btn-auth-main w-100 border-0">
+
+                            Login
+
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-4">
+
+                        <p class="mb-0">
+
+                            Pas de compte ?
+
+                            <a href="/accounts/register/" class="auth-link">
+
+                                Créer un compte
+
+                            </a>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

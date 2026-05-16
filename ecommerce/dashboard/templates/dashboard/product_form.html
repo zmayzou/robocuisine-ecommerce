@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Produit
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>Dashboard</span>
+
+            {% if product %}
+
+                <h2>Modifier produit</h2>
+
+            {% else %}
+
+                <h2>Ajouter produit</h2>
+
+            {% endif %}
+
+            <p>
+                Si la référence existe déjà, le système augmente automatiquement le stock.
+            </p>
+
+        </div>
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            class="bg-white p-5 rounded-5 shadow-sm"
+        >
+
+            {% csrf_token %}
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label class="form-label">Catégorie</label>
+                    {{ form.category }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Nom</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Slug</label>
+                    {{ form.slug }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Référence</label>
+                    {{ form.reference }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Prix</label>
+                    {{ form.price }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Stock</label>
+                    {{ form.stock }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Couleur</label>
+                    {{ form.color }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Image</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="col-12">
+
+                    <div class="form-check">
+                        {{ form.is_available }}
+                        <label class="form-check-label">
+                            Produit disponible
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-5">
+
+                <button class="btn-premium-main border-0">
+                    Enregistrer
+                </button>
+
+                <a
+                    href="{% url 'dashboard_products' %}"
+                    class="btn btn-dark ms-2"
+                >
+                    Retour
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

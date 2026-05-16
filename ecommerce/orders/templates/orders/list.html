@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mes commandes
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                Historique
+            </span>
+
+            <h2>
+                Mes Commandes
+            </h2>
+
+            <p>
+                Consultez toutes vos commandes enregistrées.
+            </p>
+
+        </div>
+
+        {% if orders %}
+
+        <div class="table-responsive">
+
+            <table class="table align-middle bg-white">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Numéro
+                        </th>
+
+                        <th>
+                            Client
+                        </th>
+
+                        <th>
+                            Ville
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Statut
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for order in orders %}
+
+                    <tr>
+
+                        <td class="fw-bold">
+
+                            {{ order.order_number }}
+
+                        </td>
+
+                        <td>
+
+                            {{ order.full_name }}
+
+                        </td>
+
+                        <td>
+
+                            {{ order.city }}
+
+                        </td>
+
+                        <td class="fw-bold text-warning">
+
+                            {{ order.total_price }} DH
+
+                        </td>
+
+                        <td>
+
+                            {% if order.status == 'pending' %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    En attente
+
+                                </span>
+
+                            {% elif order.status == 'confirmed' %}
+
+                                <span class="badge bg-success">
+
+                                    Confirmée
+
+                                </span>
+
+                            {% elif order.status == 'cancelled' %}
+
+                                <span class="badge bg-danger">
+
+                                    Annulée
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-dark">
+
+                                    {{ order.status }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ order.created_at }}
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'order_detail' order.id %}"
+                                class="btn btn-dark btn-sm"
+                            >
+                                Détails
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            Aucune commande trouvée.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

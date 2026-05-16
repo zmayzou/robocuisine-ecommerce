@@ -1,0 +1,309 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row align-items-center">
+
+        <div class="col-md-6">
+
+            <img
+                src="{{ product.image.url }}"
+                class="img-fluid rounded shadow-sm"
+                alt="{{ product.name }}"
+            >
+
+        </div>
+
+        <div class="col-md-6">
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+            <p class="text-muted">
+                Référence :
+                {{ product.reference }}
+            </p>
+
+            <h3 class="my-4">
+                {{ product.price }} DH
+            </h3>
+
+            <p>
+                {{ product.description }}
+            </p>
+
+            <div class="mb-4">
+
+                {% if product.stock > 0 %}
+
+                    <span class="badge bg-success">
+                        En stock : {{ product.stock }}
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger">
+                        Rupture de stock
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            {% if product.stock > 0 %}
+
+                <a
+                    href="{% url 'add_to_cart' product.id %}"
+                    class="btn-premium-main"
+                >
+                    Ajouter au panier
+                </a>
+
+            {% else %}
+
+                <button
+                    class="btn btn-danger"
+                    disabled
+                >
+                    Rupture de stock
+                </button>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<section class="products-section pt-0">
+
+    <div class="container">
+
+        <div class="premium-product-card p-5">
+
+            <h2 class="fw-bold mb-5">
+                Avis des utilisateurs
+            </h2>
+
+            {% if user.is_authenticated %}
+
+            <form
+                method="post"
+                action="{% url 'add_review' product.slug %}"
+                class="mb-5"
+            >
+
+                {% csrf_token %}
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Note
+                    </label>
+
+                    <select
+                        name="rating"
+                        class="form-control"
+                        required
+                    >
+
+                        <option value="">
+                            Choisir une note
+                        </option>
+
+                        <option value="5">
+                            ⭐⭐⭐⭐⭐
+                        </option>
+
+                        <option value="4">
+                            ⭐⭐⭐⭐
+                        </option>
+
+                        <option value="3">
+                            ⭐⭐⭐
+                        </option>
+
+                        <option value="2">
+                            ⭐⭐
+                        </option>
+
+                        <option value="1">
+                            ⭐
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Commentaire
+                    </label>
+
+                    <textarea
+                        name="comment"
+                        rows="4"
+                        class="form-control"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <button class="btn-premium-main border-0">
+                    Ajouter un avis
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <div class="alert alert-warning">
+                Connectez-vous pour ajouter un avis.
+            </div>
+
+            {% endif %}
+
+            {% for review in product.reviews.all %}
+
+            <div class="review-box mb-4">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <h5 class="fw-bold">
+                        {{ review.user.username }}
+                    </h5>
+
+                    <span class="text-warning">
+
+                        {% for i in "12345" %}
+
+                            {% if forloop.counter <= review.rating %}
+                                ⭐
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </span>
+
+                </div>
+
+                <p>
+                    {{ review.comment }}
+                </p>
+
+                <small class="text-muted">
+                    {{ review.created_at }}
+                </small>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                Aucun avis pour ce produit.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="products-section pt-0">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                Suggestions
+            </span>
+
+            <h2>
+                Produits similaires
+            </h2>
+
+        </div>
+
+        <div class="row g-4">
+
+            {% for related in related_products %}
+
+            <div class="col-md-3">
+
+                <div class="premium-product-card">
+
+                    <div class="premium-image-box">
+
+                        <img
+                            src="{{ related.image.url }}"
+                            alt="{{ related.name }}"
+                        >
+
+                    </div>
+
+                    <div class="premium-card-body">
+
+                        <div class="product-category">
+                            {{ related.category.name }}
+                        </div>
+
+                        <h3>
+                            {{ related.name }}
+                        </h3>
+
+                        <div class="product-footer">
+
+                            <div class="price-box">
+
+                                <strong>
+                                    {{ related.price }} DH
+                                </strong>
+
+                            </div>
+
+                            <a
+                                href="{% url 'product_detail' related.slug %}"
+                                class="circle-btn"
+                            >
+                                <i class="bi bi-arrow-up-right"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="empty-state">
+                    Aucun produit similaire.
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

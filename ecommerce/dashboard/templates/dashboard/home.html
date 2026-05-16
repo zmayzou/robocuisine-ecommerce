@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                Administration
+            </span>
+
+            <h2>
+                Dashboard CookBot
+            </h2>
+
+            <p>
+                Vue globale sur la plateforme e-commerce.
+            </p>
+
+        </div>
+
+        <div class="text-end mb-4">
+
+            <a
+                href="{% url 'dashboard_products' %}"
+                class="btn-premium-main"
+            >
+                Gérer les produits
+            </a>
+
+        </div>
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-3">
+                <div class="premium-product-card p-4 text-center">
+                    <h1 class="fw-bold text-warning">
+                        {{ total_products }}
+                    </h1>
+                    <p class="mb-0">Produits</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="premium-product-card p-4 text-center">
+                    <h1 class="fw-bold text-warning">
+                        {{ total_categories }}
+                    </h1>
+                    <p class="mb-0">Catégories</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="premium-product-card p-4 text-center">
+                    <h1 class="fw-bold text-warning">
+                        {{ total_orders }}
+                    </h1>
+                    <p class="mb-0">Commandes</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="premium-product-card p-4 text-center">
+                    <h1 class="fw-bold text-warning">
+                        {{ total_giveaways }}
+                    </h1>
+                    <p class="mb-0">Giveaways</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-6">
+
+                <div class="premium-product-card p-4">
+
+                    <h5 class="text-muted mb-3">
+                        Chiffre d'affaires
+                    </h5>
+
+                    <h1 class="fw-bold text-success">
+                        {{ total_revenue }} DH
+                    </h1>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="premium-product-card p-4">
+
+                    <h5 class="text-muted mb-3">
+                        Produit le plus vendu
+                    </h5>
+
+                    <h3 class="fw-bold text-warning">
+
+                        {% if best_product %}
+                            {{ best_product.product__name }}
+                        {% else %}
+                            Aucun produit
+                        {% endif %}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="premium-product-card p-4 mb-5">
+
+            <h3 class="fw-bold mb-4">
+                Dernières commandes
+            </h3>
+
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Commande</th>
+                            <th>Client</th>
+                            <th>Ville</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for order in recent_orders %}
+
+                        <tr>
+                            <td>{{ order.order_number }}</td>
+                            <td>{{ order.full_name }}</td>
+                            <td>{{ order.city }}</td>
+
+                            <td class="fw-bold text-warning">
+                                {{ order.total_price }} DH
+                            </td>
+
+                            <td>
+                                {% if order.status == 'pending' %}
+                                    <span class="badge bg-warning text-dark">
+                                        En attente
+                                    </span>
+                                {% elif order.status == 'confirmed' %}
+                                    <span class="badge bg-success">
+                                        Confirmée
+                                    </span>
+                                {% elif order.status == 'cancelled' %}
+                                    <span class="badge bg-danger">
+                                        Annulée
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-dark">
+                                        {{ order.status }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Aucune commande disponible.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div
+            class="premium-product-card p-4"
+            id="dashboardStats"
+            data-products="{{ total_products }}"
+            data-categories="{{ total_categories }}"
+            data-orders="{{ total_orders }}"
+            data-giveaways="{{ total_giveaways }}"
+        >
+
+            <h3 class="fw-bold mb-4">
+                Analyse rapide
+            </h3>
+
+            <canvas id="statsChart"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const stats = document.getElementById("dashboardStats");
+    const ctx = document.getElementById("statsChart");
+
+    const totalProducts = Number(stats.dataset.products);
+    const totalCategories = Number(stats.dataset.categories);
+    const totalOrders = Number(stats.dataset.orders);
+    const totalGiveaways = Number(stats.dataset.giveaways);
+
+    new Chart(ctx, {
+        type: "bar",
+
+        data: {
+            labels: [
+                "Produits",
+                "Catégories",
+                "Commandes",
+                "Giveaways"
+            ],
+
+            datasets: [
+                {
+                    label: "Statistiques",
+                    data: [
+                        totalProducts,
+                        totalCategories,
+                        totalOrders,
+                        totalGiveaways
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

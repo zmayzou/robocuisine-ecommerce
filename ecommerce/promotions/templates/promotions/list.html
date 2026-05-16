@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Promotions
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+            <span>Offres spéciales</span>
+            <h2>Promotions & Giveaways</h2>
+            <p>
+                Découvrez les codes promotionnels actifs et les concours disponibles.
+            </p>
+        </div>
+
+        <h3 class="fw-bold mb-4">Codes promotionnels</h3>
+
+        <div class="row g-4 mb-5">
+
+            {% for promo in promotion_codes %}
+
+            <div class="col-md-4">
+
+                <div class="premium-product-card p-4">
+
+                    <span class="product-badge">
+                        -{{ promo.discount_percentage }}%
+                    </span>
+
+                    <h3 class="fw-bold mt-5">
+                        {{ promo.code }}
+                    </h3>
+
+                    <p>
+                        Valable du {{ promo.start_date }} au {{ promo.end_date }}.
+                    </p>
+
+                    <div class="alert alert-warning fw-bold">
+                        Utilisez ce code lors du checkout.
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                Aucun code promotionnel actif.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <h3 class="fw-bold mb-4">Giveaways</h3>
+
+        <div class="row g-4">
+
+            {% for giveaway in giveaways %}
+
+            <div class="col-md-6">
+
+                <div class="premium-product-card p-4">
+
+                    <h3 class="fw-bold">
+                        {{ giveaway.title }}
+                    </h3>
+
+                    <p>
+                        {{ giveaway.description }}
+                    </p>
+
+                    <p class="fw-bold text-warning">
+                        Du {{ giveaway.start_date }} au {{ giveaway.end_date }}
+                    </p>
+
+                    <a href="{% url 'participate_giveaway' giveaway.id %}" class="btn-premium-main">
+                        Participer
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="empty-state">
+                Aucun giveaway actif.
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

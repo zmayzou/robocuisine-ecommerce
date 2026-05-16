@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+
+{% block title %}
+CookBot Store - Premium Kitchen Robots
+{% endblock %}
+
+{% block content %}
+
+<section class="premium-hero">
+
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+
+    <div class="container">
+
+        <div class="row align-items-center hero-content">
+
+            <div class="col-lg-6">
+
+                <span class="premium-badge">
+
+                    <i class="bi bi-stars"></i>
+
+                    Collection Premium 2026
+
+                </span>
+
+                <h1 class="premium-title">
+
+                    La cuisine intelligente commence ici.
+
+                </h1>
+
+                <p class="premium-description">
+
+                    Découvrez des robots culinaires puissants,
+                    élégants et conçus pour transformer chaque
+                    recette en expérience premium.
+
+                </p>
+
+                <div class="hero-actions">
+
+                    <a
+                        href="#products"
+                        class="btn-premium-main"
+                    >
+
+                        Explorer la collection
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                    <a
+                        href="/promotions/"
+                        class="btn-premium-outline"
+                    >
+
+                        Offres spéciales
+
+                    </a>
+
+                </div>
+
+                <div class="hero-stats">
+
+                    <div>
+
+                        <strong>+120</strong>
+
+                        <span>
+                            Produits
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>24h</strong>
+
+                        <span>
+                            Livraison
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>4.9</strong>
+
+                        <span>
+                            Avis clients
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="hero-product-card">
+
+                    <div class="floating-label top">
+
+                        <i class="bi bi-lightning-charge-fill"></i>
+
+                        Puissance Pro
+
+                    </div>
+
+                    {% if products %}
+
+                        <img
+                            src="{{ products.0.image.url }}"
+                            class="hero-product-img"
+                            alt="{{ products.0.name }}"
+                        >
+
+                    {% endif %}
+
+                    <div class="floating-label bottom">
+
+                        <i class="bi bi-shield-check"></i>
+
+                        Garantie Premium
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="category-strip">
+
+    <div class="container">
+
+        <div class="category-list">
+
+            <span>
+                Robots multifonctions
+            </span>
+
+            <span>
+                Mixeurs
+            </span>
+
+            <span>
+                Blenders
+            </span>
+
+            <span>
+                Accessoires
+            </span>
+
+            <span>
+                Promotions
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section
+    class="products-section"
+    id="products"
+>
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                Notre sélection
+            </span>
+
+            <h2>
+                Produits en vedette
+            </h2>
+
+            <p>
+                Des équipements modernes pour une cuisine plus simple,
+                plus rapide et plus élégante.
+            </p>
+
+            <form
+    method="get"
+    action="/products/"
+    style="
+        width:700px;
+        margin:40px auto;
+        background:white;
+        padding:10px;
+        border-radius:999px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        box-shadow:0 20px 50px rgba(0,0,0,0.15);
+    "
+>
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Rechercher un produit..."
+        style="
+            flex:1;
+            height:60px;
+            border:none;
+            outline:none;
+            padding:0 25px;
+            font-size:18px;
+            background:transparent;
+        "
+    >
+
+    <button
+        type="submit"
+        style="
+            width:60px;
+            height:60px;
+            border:none;
+            border-radius:50%;
+            background:orange;
+            color:white;
+            font-size:22px;
+        "
+    >
+
+        <i class="bi bi-search"></i>
+
+    </button>
+
+</form>
+
+        </div>
+
+        <div class="row g-4">
+
+            {% for product in products %}
+
+            <div class="col-xl-4 col-md-6">
+
+                <div class="premium-product-card">
+
+                    <div class="product-badge">
+
+                        New
+
+                    </div>
+
+                    <div class="premium-image-box">
+
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+
+                    </div>
+
+                    <div class="premium-card-body">
+
+                        <div class="product-category">
+
+                            {{ product.category.name }}
+
+                        </div>
+
+                        <h3>
+
+                            {{ product.name }}
+
+                        </h3>
+
+                        <p>
+
+                            {{ product.description|truncatewords:16 }}
+
+                        </p>
+
+                        <div class="product-footer">
+
+                            <div class="price-box">
+
+                                <span>
+                                    Prix
+                                </span>
+
+                                <strong>
+
+                                    {{ product.price }} DH
+
+                                </strong>
+
+                            </div>
+
+                            <a
+                                href="{% url 'product_detail' product.slug %}"
+                                class="circle-btn"
+                            >
+
+                                <i class="bi bi-arrow-up-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="empty-state">
+
+                    Aucun produit disponible pour le moment.
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="promise-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="promise-card">
+
+                    <i class="bi bi-truck"></i>
+
+                    <h4>
+                        Livraison rapide
+                    </h4>
+
+                    <p>
+                        Service efficace pour recevoir vos produits
+                        dans les meilleurs délais.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="promise-card featured">
+
+                    <i class="bi bi-award"></i>
+
+                    <h4>
+                        Qualité premium
+                    </h4>
+
+                    <p>
+                        Produits sélectionnés pour leur performance,
+                        design et durabilité.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="promise-card">
+
+                    <i class="bi bi-headset"></i>
+
+                    <h4>
+                        Support client
+                    </h4>
+
+                    <p>
+                        Accompagnement avant et après commande
+                        pour une meilleure expérience.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

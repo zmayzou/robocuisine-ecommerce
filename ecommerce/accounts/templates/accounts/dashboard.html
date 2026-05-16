@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Mon Dashboard
+{% endblock %}
+
+{% block content %}
+
+<section class="products-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>
+                Mon espace
+            </span>
+
+            <h2>
+                Dashboard utilisateur
+            </h2>
+
+            <p>
+                Bienvenue {{ user.username }}
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-3">
+
+                <div class="premium-product-card p-4 text-center">
+
+                    <h1 class="fw-bold text-warning">
+
+                        {{ total_orders }}
+
+                    </h1>
+
+                    <p>
+                        Commandes
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="premium-product-card p-4 text-center">
+
+                    <h1 class="fw-bold text-success">
+
+                        {{ total_spent }} DH
+
+                    </h1>
+
+                    <p>
+                        Dépensé
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="premium-product-card p-4 text-center">
+
+                    <h1 class="fw-bold text-info">
+
+                        {{ total_participations }}
+
+                    </h1>
+
+                    <p>
+                        Giveaways
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <div class="premium-product-card p-4 text-center">
+
+                    <h1 class="fw-bold text-dark">
+
+                        {% if latest_order %}
+                            #{{ latest_order.id }}
+                        {% else %}
+                            0
+                        {% endif %}
+
+                    </h1>
+
+                    <p>
+                        Dernière commande
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
