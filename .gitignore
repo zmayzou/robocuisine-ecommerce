@@ -1,0 +1,39 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg-info/
+*.egg
+.Python
+build/
+dist/
+downloads/
+eggs/
+parts/
+sdist/
+var/
+*.log
+
+# Virtualenv
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Django
+*.sqlite3
+media/
+staticfiles/
+/db.sqlite3
+
+# Unwanted local directories
+cenception/
+lesnote ajouter/
+
+# Editor / OS
+*.swp
+*~
+.DS_Store
+.idea/
+.vscode/
